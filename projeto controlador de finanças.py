@@ -1,5 +1,4 @@
 historico = []
-
 while True:
     item = input("é despesa ou compra? ") 
     if item == "compra": 
