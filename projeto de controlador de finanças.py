@@ -1,17 +1,16 @@
 historico = []
+
+renda = float(input("qual a sua renda esse mes? "))
+
 while True:
-    item = input("é despesa ou compra? ") 
-    if item == "compra": 
-        nome = input("o que comprou? ")
-    elif item == "despesa":    
-        nome = input("qual conta pagou? ")
-    else:  
-        print("opção invalida, tente novamente")
-        continue
+    entrada = input("Informe: categoria/nome/valor (ex: comprei/tenis/250,50): ") 
+    lista = entrada.split("/")
+    categoria = entrada.split("/")[0]
+    nome = entrada.split("/")[1]
+    valor = entrada.split("/")[2]
+    valor = float(valor.replace(",", ".")) 
 
-    valor = float(input("quanto custou? ")) 
-
-    ficha = {"categoria": item, "preco": valor, "nome": nome}
+    ficha = {"categoria": categoria, "nome": nome, "preco": valor}
 
     confirmar = input("os dados acima estão corretos? (s/n) ")
     if confirmar =="n":
@@ -23,12 +22,17 @@ while True:
     if continuar == "n":
         break
 
-total_compra = 0
-total_despesa = 0
+total_compra_or_comprei = 0
+total_pagamento = 0
 for ficha in historico:
-    if ficha["categoria"] == "compra":
-        total_compra += ficha["preco"]
+    if ficha["categoria"] == "compra" or ficha["categoria"] == "comprei":
+        total_compra_or_comprei += ficha["preco"]
     else:
-        total_despesa += ficha["preco"]
-print(f"Total de despesa: R$ {total_despesa:.2f}")
-print(f"Total de compra: R$ {total_compra:.2f}")
+        total_pagamento += ficha["preco"]
+print(f"Total de compra: R$ {total_compra_or_comprei:.2f}")
+print(f"Total de pagamento: R$ {total_pagamento:.2f}")
+saldo = renda - (total_compra_or_comprei + total_pagamento)
+if saldo >= 0:
+    print(f"Você ainda pode gastar R$ {saldo:.2f} sem ficar no vermelho")
+else:
+    print(f"Atenção: você está no vermelho em R$ {abs(saldo):.2f} por favor pare de gastar!")
