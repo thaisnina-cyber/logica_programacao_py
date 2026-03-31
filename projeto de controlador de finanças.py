@@ -32,4 +32,3 @@ for ficha in historico:
         total_despesa += ficha["preco"]
 print(f"Total de despesa: R$ {total_despesa:.2f}")
 print(f"Total de compra: R$ {total_compra:.2f}")
-    
