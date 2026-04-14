@@ -9,10 +9,10 @@ def carregar_dados():
     try:
         with open("dados.json", "r") as arquivo:
             dados_salvos = json.load(arquivo)
-            return dados_salvos["valor_da_renda"], dados_salvos["lista_de_gastos"]
-    except:
-        return {"valor_da_renda": 0, "lista_de_gastos": []}
-        
+            return dados_salvos.get("valor_da_renda", 0), dados_salvos.get("lista_de_gastos", [])
+    except (FileNotFoundError, json.JSONDecodeError, KeyError):
+        return 0, []
+
 def salvar_dados(renda, historico):
     dados_salvos = {"valor_da_renda": renda, "lista_de_gastos": historico}
     with open("dados.json", "w") as arquivo:
