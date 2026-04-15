@@ -1,0 +1,34 @@
+import json
+from datetime import datetime
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+def carregar_dados():
+    try:
+        with open("dados.json", "r") as arquivo:
+            dados_salvos = json.load(arquivo)
+            return dados_salvos.get("valor_da_renda", 0), dados_salvos.get("lista_de_gastos", [])
+    except (FileNotFoundError, json.JSONDecodeError, KeyError):
+        return 0, []
+
+def salvar_dados(renda, historico):
+    dados_salvos = {"valor_da_renda": renda, "lista_de_gastos": historico}
+    with open("dados.json", "w") as arquivo:
+        json.dump(dados_salvos, arquivo, indent=4)
+@app.route("/dados", methods=["GET"])
+def obter_dados():
+    renda, historico = carregar_dados()
+    return jsonify({"renda": renda, "historico": historico})
+@app.route("/dados", methods=["POST"])
+def atualizar_dados():
+    dados = request.get_json()
+    renda = dados.get("renda", 0)
+    historico = dados.get("historico", [])
+    salvar_dados(renda, historico)
+    return jsonify({"message": "Dados atualizados com sucesso!"}), 200
+  
+if __name__ == "__main__":
+    app.run(debug=True)
+
